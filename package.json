@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/philbrookes/storage-frontend",
   "dependencies": {
+    "body-parser": "^1.12.4",
     "express": "^4.12.3",
     "http": "0.0.0",
     "mongoose": "^4.0.3",
