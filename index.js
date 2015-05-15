@@ -5,9 +5,11 @@ var swig = require('swig');
 
 
 app.get("/", function(req, res){
-  swig.renderFile('./templates/index.swig', {
-    name: "phil"
-  });
+  res.send(
+    swig.renderFile('./templates/index.swig', {
+      name: "phil"
+    })
+  );
 });
 
 //app.use(express.static('public'));
