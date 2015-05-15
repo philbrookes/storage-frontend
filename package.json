@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/philbrookes/storage-frontend/issues"
   },
-  "homepage": "https://github.com/philbrookes/storage-frontend"
+  "homepage": "https://github.com/philbrookes/storage-frontend",
+  "dependencies": {
+    "express": "^4.12.3",
+    "http": "0.0.0"
+  }
 }
