@@ -1,9 +1,17 @@
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
+var swig = require('swig');
 
-app.use(express.static('public'));
+
+app.get("/", function(req, res){
+  swig.renderFile('./templates/index.swig', {
+    name: "phil"
+  });
+});
+
+//app.use(express.static('public'));
 
 http.listen(8080, function(){ console.log("ready!")});
 
-mongoose.connect('mongodb://172.30.17.249');
+//mongoose.connect('mongodb://172.30.17.249');
