@@ -3,8 +3,16 @@ var app = express();
 var http = require('http').Server(app);
 var swig = require('swig');
 var bodyParser = require('body-parser')
+var mongoose = require('mongoose');
 
-//mongoose.connect('mongodb://172.30.17.249');
+//mongoose.connect('mongodb://192.168.59.103');
+mongoose.connect('mongodb://172.30.17.249');
+
+var userSchema = mongoose.Schema({
+  name: String
+});
+
+var User = mongoose.model('user', userSchema);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -12,14 +20,20 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.get("/", function(req, res){
-  res.send(
-    swig.renderFile('./templates/index.swig', {
-      name: "phil"
-    })
-  );
+  res.redirect("/users");
 });
 
-app.get("/user", function(req, res){
+app.get("/users", function(req, res){
+  User.find({}, function(err, users) {
+    res.send(
+      swig.renderFile('./templates/index.swig', {
+        users: users
+      })
+    );
+  });
+});
+
+app.get("/user/add", function(req, res){
   res.send(
     swig.renderFile('./templates/user.swig', {
       user: {}
@@ -27,23 +41,40 @@ app.get("/user", function(req, res){
   );
 });
 
-app.get("/user/:id", function(req, res){
-  res.send(
-    swig.renderFile('./templates/user.swig', {
-      user: {
-        id: req.params.id,
-        name: "phil"
-      }
-    })
-  );
+app.get("/user/:id/edit", function(req, res){
+  User.find({_id: req.params.id}, function(err, users) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(
+        swig.renderFile('./templates/user.swig', {
+          user: {
+            id: users[0].id,
+            name: users[0].name
+          }
+        })
+      );
+    }
+  });
 });
 
 app.post("/user", function(req, res){
-  res.send(req.body);
+  var user = new User({name: req.body.name});
+  user.save();
+  res.redirect("/users");
 });
 
 app.post("/user/:id", function(req, res){
-  res.send(req.body.name);
+  var user = User.find({_id: req.params.id}, function(err, users){
+    console.log(users);
+    if(err){
+      res.send(err);
+    } else {
+      users[0].name = req.body.name;
+      users[0].save();
+      res.redirect('/users');
+    }
+  });
 });
 
 http.listen(8080, function(){ console.log("ready!")});
