@@ -5,8 +5,7 @@ var swig = require('swig');
 var bodyParser = require('body-parser')
 var mongoose = require('mongoose');
 
-//mongoose.connect('mongodb://192.168.59.103');
-mongoose.connect('mongodb://172.30.17.249');
+mongoose.connect('mongodb://mongo.storage.local');
 
 var userSchema = mongoose.Schema({
   name: String
